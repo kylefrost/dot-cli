@@ -1,10 +1,13 @@
 import click
 
-
-@click.command()
-@click.option('push', default=None, help="Push dotfiles to GitHub.")
-@click.argument('name', default='world', required=False)
-def push(name, as_cowboy):
+@click.group(invoke_without_command=True)
+@click.pass_context
+def main(ctx):
     """Easily manage dotfiles through the command line."""
-    greet = 'Howdy' if as_cowboy else 'Hello'
-    click.echo('{0}, {1}.'.format(greet, name))
+    if ctx.invoked_subcommand is None:
+        click.echo('Running main...')
+
+@main.command(help="Test")
+@click.pass_obj
+def push(ctx):
+    click.echo('Pushing...')
