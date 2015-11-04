@@ -5,12 +5,15 @@ Easily manage dotfiles through the command line.
 
 # Installation
 
-If you don't use `pipsi`, you're missing out.
-Here are [installation instructions](https://github.com/mitsuhiko/pipsi#readme).
-
 Simply run:
 
-    $ pipsi install .
+    $ pip install dot
+    
+Or if you want to install it from source
+    
+    $ git clone https://github.com/kylefrost/dot.git
+    $ cd dot/
+    $ python setup.py install
 
 
 # Usage
@@ -19,3 +22,6 @@ To use it:
 
     $ dot --help
 
+# License
+
+[GNU GPL v3.0](LICENSE)
