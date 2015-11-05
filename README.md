@@ -18,9 +18,31 @@ Or if you want to install it from source
 
 # Usage
 
-To use it:
+Initial Setup:
 
-    $ dot --help
+    $ dot config
+
+This will ask for your GitHub username and the name of the repo which you wish to store your dotfiles.
+
+Add dotfiles to be tracked:
+
+    $ dot track [file]
+
+Must include the beginning `.`.
+
+Push dotfiles to GitHub:
+
+    $ dot push
+
+Pull dotfiles from GitHub:
+
+    $ dot pull
+
+Manually update options:
+
+    $ dot config [option] [value]
+
+Or, update the file located at `$HOME/.dotconfig`.
 
 # License
 
