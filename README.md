@@ -2,6 +2,12 @@
 
 Easily manage dotfiles through the command line.
 
+# Prerequisites
+
+- `git` set up on your machine.
+    - Must use SSH key authentication. For more infomrmatin see [Generating SSH Keys](https://help.github.com/articles/generating-ssh-keys/).
+- A GitHub repo to store your dotfiles (default repo name is `dotfiles`).
+- `pip` (Python package manager)
 
 # Installation
 

@@ -13,14 +13,15 @@ def main(ctx, verbose):
     ctx.obj = {}
     ctx.obj['verbose'] = verbose
     VerboseLog('Running dot...', ctx)
-    if ctx.invoked_subcommand is None:
-        click.echo('Running main...')
 
 @main.command(help="Push dotfiles to GitHub.")
 @click.pass_context
 def push(ctx):
     """Push dotfile changes to GitHub."""
-    click.echo('Pushing...')
+    VerboseLog('Pushing dotfiles to repo...', ctx)
+    Config.read(os.path.expanduser("~") + "/.dotconfig")
+    git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
+    return_code = git.push()
 
 @main.command(help="Pull dotfiles from GitHub.")
 @click.pass_context
@@ -29,20 +30,16 @@ def pull(ctx):
     VerboseLog('Pulling dotfiles from repo...', ctx)
     Config.read(os.path.expanduser("~") + "/.dotconfig")
     git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
-    git.pull()
+    return_code = git.pull()
 
 @main.command(help="Change configuration options.")
 @click.pass_context
 def config(ctx):
     """Configure options for dot."""
     config_file = os.path.expanduser("~") + "/.dotconfig"
-    isInitSetup = False
-
-    if not os.path.isfile(config_file):
-        isInitSetup = True
 
     """No .dotconfig, so set up from scratch (assume first run)"""
-    if isInitSetup:
+    if not os.path.isfile(config_file):
         VerboseLog('Initializing first set up.', ctx)
 
         # Open config file and create dir
@@ -79,12 +76,11 @@ def config(ctx):
 
         Config.read(os.path.expanduser("~") + "/.dotconfig")
         git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
-        git.clone()
-        click.echo('dot is initalized. Run `dot pull` to set files, or `dot push` if this is your first time using dot.')
+        return_code = git.clone()
+        click.echo('dot is initalized. Run `dot pull` to pull dotfiles, or `dot push` if you\'ve never used dot.')
     else:
         VerboseLog('Is not initial set up.', ctx)
-        click.echo('You already set up dot. Run dot config [option] [value] to change config, or edit ' + os.path.expanduser("~") + '/.dotconfig')
-        return False
+        click.echo('You already set up dot. Run dot config [option] [value] to change a config value, or edit ' + os.path.expanduser("~") + '/.dotconfig.')
 
 
 """Log verbose messages"""
