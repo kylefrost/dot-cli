@@ -1,0 +1,7 @@
+#!/bin/bash
+
+rm ~/.dotconfig
+rm -rf ~/.dot/
+python setup.py install
+clear
+dot

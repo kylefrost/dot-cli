@@ -7,5 +7,5 @@ build/
 .tox/
 .coverage
 .cache
-install # Script used for personal testing
-*.swp # Because VIM is the best and if you use Emacs you suck
+install
+*.swp
