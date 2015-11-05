@@ -83,7 +83,7 @@ def config(ctx):
         click.echo('dot is initalized. Run `dot pull` to set files, or `dot push` if this is your first time using dot.')
     else:
         VerboseLog('Is not initial set up.', ctx)
-        click.echo('You already set up dot. Run dot config <option> <value> to change config, or edit ' + os.path.expanduser("~") + '/.dotconfig')
+        click.echo('You already set up dot. Run dot config [option] [value] to change config, or edit ' + os.path.expanduser("~") + '/.dotconfig')
         return False
 
 
