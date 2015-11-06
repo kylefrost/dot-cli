@@ -9,13 +9,13 @@ Config = ConfigParser.ConfigParser()
 @click.option('--verbose', is_flag=True, default=False, help="Run dot in verbose mode.")
 @click.pass_context
 def main(ctx, verbose):
-    """Easily manage dotfiles through the command line"""
+    """Lightweight tool for managing dotfiles with git and the command line"""
 
     VerboseLog('Running dot...', ctx)
     ctx.obj = {}
     ctx.obj['verbose'] = verbose
 
-@main.command(help="Push dotfiles to GitHub.")
+@main.command(help="Push dotfile changes to GitHub.")
 @click.pass_context
 def push(ctx):
     """Push dotfile changes to GitHub"""
@@ -29,7 +29,7 @@ def push(ctx):
 
     VerboseLog('git.push() return code - ' + return_code, ctx)
 
-@main.command(help="Pull dotfiles from GitHub.")
+@main.command(help="Pull dotfile changes from GitHub.")
 @click.pass_context
 def pull(ctx):
     """Pull dotfile changes from GitHub repo"""
@@ -51,10 +51,10 @@ def track(ctx):
     VerboseLog('Running track()', ctx)
     pass
 
-@main.command(help="Change configuration options.")
+@main.command(help="Change or add configuration options and initial setup.")
 @click.pass_context
 def config(ctx):
-    """Configure options for dot"""
+    """Change or add configuration options and initial setup"""
     config_file = os.path.expanduser("~") + "/.dotconfig"
 
     if not os.path.isfile(config_file):

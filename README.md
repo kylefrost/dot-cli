@@ -1,6 +1,6 @@
 # dot
 
-Easily manage dotfiles through the command line.
+Lightweight tool for managing dotfiles with git and the command line.
 
 # Prerequisites
 

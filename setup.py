@@ -12,7 +12,7 @@ setup(
     license='BSD',
     author='Kyle Frost',
     author_email='kyle@kylefrost.me',
-    description='Easily manage dotfiles through the command line.',
+    description='Lightweight tool for managing dotfiles with git and the command line.',
     long_description=__doc__,
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
