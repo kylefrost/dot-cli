@@ -22,6 +22,7 @@ Or if you want the most up-to-date version (could be broken!):
     
     $ git clone https://github.com/kylefrost/dot.git
     $ cd dot/
+    $ pip install -r requirements.txt
     $ python setup.py install
 
 
