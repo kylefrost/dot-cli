@@ -45,7 +45,7 @@ Must include the beginning "`.`" if the file is hidden (which if it isn't, is it
 
     $ dot push
 
-### Pull dotfiles to repo
+### Pull dotfiles from repo
 
     $ dot pull
 
@@ -62,11 +62,20 @@ The only thing `dot` stores in regards to your `git` information is your usernam
 
 # Contribute
 
-#### Contributions are encouraged!
-
 __Want a certain feature?__ [Open an issue](https://github.com/kylefrost/dot/issues) and label it `feature request`.
 
 __Know how to code?__ [Fork this repo](https://github.com/kylefrost/dot/fork) and submit a [pull request](https://github.com/kylefrost/dot/pulls).
+
+### Syntax and Comments
+
+If you wish to contribute by editing or adding to the codebase, please follow the structure that is already in place (outline briefly below).
+
+- String comments as first line under function definitions
+- Little to no comments, your code should speak for itself
+    - If you write something that requires explaining, keep comments to-the-point
+- Add appropriate `VerboseLog(message, ctx)` calls
+- Use provided `GetConfig(section)` when reading `.dotconfig` file
+- Unused code should be removed, not left and commented out
 
 # License
 

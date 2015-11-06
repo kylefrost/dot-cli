@@ -46,6 +46,9 @@ def pull(ctx):
 @main.command(help="Add files to dot's tracking")
 @click.pass_context
 def track(ctx):
+    """Add files to dot's tracking"""
+    
+    VerboseLog('Running track()', ctx)
     pass
 
 @main.command(help="Change configuration options.")
@@ -55,13 +58,12 @@ def config(ctx):
     config_file = os.path.expanduser("~") + "/.dotconfig"
 
     if not os.path.isfile(config_file):
+
         VerboseLog('Initializing first set up.', ctx)
 
-        # Open config file and create dir
         f = open(config_file, 'w+')
         os.makedirs(os.path.expanduser("~") + "/.dot/")
 
-        # Add options section to .dotconfig
         Config.add_section('options')
 
         VerboseLog('Requesting user options for initial settings.', ctx)
@@ -73,14 +75,10 @@ def config(ctx):
         #Config.set('options', 'home', value)
         #os.makedirs(value + "/.dot/")
 
-        # Request GitHub user name
         value = click.prompt('GitHub user name', confirmation_prompt=True)
-
         Config.set('options', 'gitname', value)
 
-        # Request GitHub repo name
         value = click.prompt('GitHub repo name', default='dotfiles')
-
         Config.set('options', 'reponame', value)
 
         Config.write(f)
