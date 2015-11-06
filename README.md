@@ -6,10 +6,10 @@ Easily manage dotfiles through the command line.
 
 - `git` set up on your machine.
     - Must use SSH key authentication. For more infomrmatin see [Generating SSH Keys](https://help.github.com/articles/generating-ssh-keys/).
-    - *You already should be doing this for security purposes, anyway.*
+        - *You already should be doing this for security purposes, anyway.*
 - A GitHub repo to store your dotfiles (default repo name is `dotfiles`).
     - [Create a repo](https://github.com/new), named anything you want. It can even be private!
-        - *If it is private, you must make sure to be using SSH key authentication, otherwise dot won't have permission to push*
+        - *If it is private, you must make sure to be using SSH key authentication, otherwise `dot` won't have permission to push.*
 - `pip` (Python package manager)
 
 # Installation
@@ -18,7 +18,7 @@ Simply run:
 
     $ pip install dot
     
-Or if you want to install it from source
+Or if you want the most up-to-date version (could be broken!):
     
     $ git clone https://github.com/kylefrost/dot.git
     $ cd dot/
@@ -27,35 +27,38 @@ Or if you want to install it from source
 
 # Usage
 
-Initial Setup:
-
-    $ dot config
+### Initial Setup
 
 This will ask for your GitHub username and the name of the repo which you wish to store your dotfiles.
 
-Add dotfiles to be tracked:
+    $ dot config
+
+
+### Track dotfiles
+
+Must include the beginning "`.`" if the file is hidden (which if it isn't, is it even a dotfile?).
 
     $ dot track [file]
 
-Must include the beginning `.`.
 
-Push dotfiles to GitHub:
+### Push dotfiles to repo
 
     $ dot push
 
-Pull dotfiles from GitHub:
+### Pull dotfiles to repo
 
     $ dot pull
 
-Manually update options:
+### Update `dot` options
+
+Alternatively, you can edit the file located at `$HOME/.dotconfig`.
 
     $ dot config [option] [value]
 
-Or, update the file located at `$HOME/.dotconfig`.
 
 # Notes
 
-The only thing `dot` stores in regards to your `git` information is your username and your dotfiles repository name. I never ask for your password or your SSH keys. You can see all of the logic for interacting with git in [`dot/git.py`](dot/git.py). `git` runs as the current user when you use `dot`, this is why SSH key authentication is a [prerequisite](https://github.com/kylefrost/dot#prerequisites), to make things go smoother.
+The only thing `dot` stores in regards to your `git` information is your username and your dotfiles repository name. I never ask for your password or your SSH keys. You can see all of the logic for interacting with `git` in [`dot/git.py`](dot/git.py). `git` runs as the current user when you use `dot`, this is why SSH key authentication is a [prerequisite](https://github.com/kylefrost/dot#prerequisites), to make things go smoother.
 
 # License
 
