@@ -9,36 +9,51 @@ Config = ConfigParser.ConfigParser()
 @click.option('--verbose', is_flag=True, default=False, help="Run dot in verbose mode.")
 @click.pass_context
 def main(ctx, verbose):
-    """Easily manage dotfiles through the command line."""
+    """Easily manage dotfiles through the command line"""
+
+    VerboseLog('Running dot...', ctx)
     ctx.obj = {}
     ctx.obj['verbose'] = verbose
-    VerboseLog('Running dot...', ctx)
 
 @main.command(help="Push dotfiles to GitHub.")
 @click.pass_context
 def push(ctx):
-    """Push dotfile changes to GitHub."""
-    VerboseLog('Pushing dotfiles to repo...', ctx)
+    """Push dotfile changes to GitHub"""
+
+    VerboseLog('Running push()', ctx)
     Config.read(os.path.expanduser("~") + "/.dotconfig")
+
+    VerboseLog('Creating Git class object, running git.push()', ctx)
     git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
     return_code = git.push()
+
+    VerboseLog('git.push() return code - ' + return_code, ctx)
 
 @main.command(help="Pull dotfiles from GitHub.")
 @click.pass_context
 def pull(ctx):
-    """Pull dotfile changes from GitHub repo."""
-    VerboseLog('Pulling dotfiles from repo...', ctx)
+    """Pull dotfile changes from GitHub repo"""
+
+    VerboseLog('Running pull()', ctx)
     Config.read(os.path.expanduser("~") + "/.dotconfig")
+
+    VerboseLog('Creating Git class object, running git.pull()', ctx)
     git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
     return_code = git.pull()
+
+    VerboseLog('git.pull() return code - ' + return_code, ctx)
+
+@main.command(help="Add files to dot's tracking")
+@click.pass_context
+def track(ctx):
+    pass
 
 @main.command(help="Change configuration options.")
 @click.pass_context
 def config(ctx):
-    """Configure options for dot."""
+    """Configure options for dot"""
     config_file = os.path.expanduser("~") + "/.dotconfig"
 
-    """No .dotconfig, so set up from scratch (assume first run)"""
     if not os.path.isfile(config_file):
         VerboseLog('Initializing first set up.', ctx)
 
@@ -87,13 +102,13 @@ def config(ctx):
         click.echo('You already set up dot. Run dot config [option] [value] to change a config value, or edit ' + os.path.expanduser("~") + '/.dotconfig.')
 
 
-"""Log verbose messages"""
 def VerboseLog(message, ctx):
+    """Log verbose messages"""
     if ctx.obj['verbose']:
         click.echo('VERBOSE: ' + message)
 
-"""Read config file sections quickly"""
 def GetConfig(section):
+    """Read config file sections"""
     dict1 = {}
     options = Config.options(section)
     for option in options:
@@ -107,6 +122,12 @@ def GetConfig(section):
     return dict1
 
 # TODO: Implement dynamic home, replace instances of os.path.expanduser("~") with home()
-"""Pulls home from file and returns string"""
 def home():
+    """Read home from config file and return as string"""
+    pass
+
+# TODO: Implement choice of git hosting site, add to init of Git() class object
+#       for use when interacting with git
+def githost():
+    """Read githost from config file and return as string"""
     pass

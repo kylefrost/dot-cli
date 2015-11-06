@@ -8,4 +8,5 @@ build/
 .coverage
 .cache
 install
+clean
 *.swp

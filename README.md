@@ -60,6 +60,14 @@ Alternatively, you can edit the file located at `$HOME/.dotconfig`.
 
 The only thing `dot` stores in regards to your `git` information is your username and your dotfiles repository name. I never ask for your password or your SSH keys. You can see all of the logic for interacting with `git` in [`dot/git.py`](dot/git.py). `git` runs as the current user when you use `dot`, this is why SSH key authentication is a [prerequisite](https://github.com/kylefrost/dot#prerequisites), to make things go smoother.
 
+# Contribute
+
+#### Contributions are encouraged!
+
+__Want a certain feature?__ [Open an issue](https://github.com/kylefrost/dot/issues) and label it `feature request`.
+
+__Know how to code?__ [Fork this repo](https://github.com/kylefrost/dot/fork) and submit a [pull request](https://github.com/kylefrost/dot/pulls).
+
 # License
 
 [GNU GPL v3.0](LICENSE)
