@@ -77,7 +77,11 @@ def config(ctx):
         Config.read(os.path.expanduser("~") + "/.dotconfig")
         git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
         return_code = git.clone()
-        click.echo('dot is initalized. Run `dot pull` to pull dotfiles, or `dot push` if you\'ve never used dot.')
+        VerboseLog("git.clone() return_code - " + str(return_code), ctx)
+        if return_code == 0:
+            click.echo("\ndot is initalized. Run `dot pull` to pull dotfiles,\nor `dot push` or `dot track [dotfile]` if you\'ve never\nused dot. Also see `dot --help`.")
+        else:
+            click.echo("\ndot could not pull your repo from GitHub. Please\nrun `dot config` again if you mistyped your information,\nor check your prerequisites on https://github.com/kylefrost/dot.")
     else:
         VerboseLog('Is not initial set up.', ctx)
         click.echo('You already set up dot. Run dot config [option] [value] to change a config value, or edit ' + os.path.expanduser("~") + '/.dotconfig.')

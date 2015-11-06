@@ -6,7 +6,10 @@ Easily manage dotfiles through the command line.
 
 - `git` set up on your machine.
     - Must use SSH key authentication. For more infomrmatin see [Generating SSH Keys](https://help.github.com/articles/generating-ssh-keys/).
+    - *You already should be doing this for security purposes, anyway.*
 - A GitHub repo to store your dotfiles (default repo name is `dotfiles`).
+    - [Create a repo](https://github.com/new), named anything you want. It can even be private!
+        - *If it is private, you must make sure to be using SSH key authentication, otherwise dot won't have permission to push*
 - `pip` (Python package manager)
 
 # Installation
@@ -49,6 +52,10 @@ Manually update options:
     $ dot config [option] [value]
 
 Or, update the file located at `$HOME/.dotconfig`.
+
+# Notes
+
+The only thing `dot` stores in regards to your `git` information is your username and your dotfiles repository name. I never ask for your password or your SSH keys. You can see all of the logic for interacting with git in [`dot/git.py`](dot/git.py). `git` runs as the current user when you use `dot`, this is why SSH key authentication is a [prerequisite](https://github.com/kylefrost/dot#prerequisites), to make things go smoother.
 
 # License
 
