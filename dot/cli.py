@@ -43,7 +43,7 @@ def pull(ctx):
 
     VerboseLog('git.pull() return code - ' + return_code, ctx)
 
-@main.command(help="Add files to dot's tracking")
+@main.command(help="Add files to dot's tracking.")
 @click.pass_context
 def track(ctx):
     """Add files to dot's tracking"""
@@ -51,10 +51,10 @@ def track(ctx):
     VerboseLog('Running track()', ctx)
     pass
 
-@main.command(help="Change or add configuration options and initial setup.")
+@main.command(help="Change or add configuration options.")
 @click.pass_context
 def config(ctx):
-    """Change or add configuration options and initial setup"""
+    """Change or add configuration options"""
     config_file = os.path.expanduser("~") + "/.dotconfig"
 
     if not os.path.isfile(config_file):
