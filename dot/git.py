@@ -20,7 +20,7 @@ class Git:
         git_url = self._github + self.gitname + "/" + self.reponame + ".git"
         os.chdir(dest_path)
         with open(os.devnull, 'w') as fnull:
-            gclone = subprocess.call(["git", "clone", git_url, "."], stdout=fnull, stderr=subprocess.STDOUT)
+            gclone = subprocess.call(["git", "clone", git_url, "."], stdout=fnull, stderr=fnull)
 
         already_has_managed_text = False
         with open('README.md', 'r') as f:

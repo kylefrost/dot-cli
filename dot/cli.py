@@ -150,6 +150,16 @@ def config_exists():
     """Determine if config file exists and return boolean"""
     pass
 
+# TODO: Get config file string and return
+def config_file():
+    """Return config file path as string"""
+    pass
+
+# TODO: Get dot git directory ($HOME/.dot/) and return
+def dot_dir():
+    """Return dot directory path as string"""
+    pass
+
 # TODO: Implement dynamic home, replace instances of os.path.expanduser("~") with home()
 def home():
     """Determine home and return as string"""
