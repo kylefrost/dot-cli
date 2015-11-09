@@ -55,6 +55,9 @@ def track(ctx):
 @click.pass_context
 def config(ctx):
     """Change or add configuration options"""
+
+    VerboseLog('Running config()', ctx)
+
     config_file = os.path.expanduser("~") + "/.dotconfig"
 
     if not os.path.isfile(config_file):
