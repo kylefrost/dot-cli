@@ -32,14 +32,14 @@ Or if you want the most up-to-date version (could be broken!):
 
 This will ask for your GitHub username and the name of the repo which you wish to store your dotfiles.
 
-    $ dot config
+    $ dot init
 
 
 ### Track dotfiles
 
 Must include the beginning "`.`" if the file is hidden (which if it isn't, is it even a dotfile?).
 
-    $ dot track [file]
+    $ dot track [filename]
 
 
 ### Push dotfiles to repo
@@ -52,7 +52,7 @@ Must include the beginning "`.`" if the file is hidden (which if it isn't, is it
 
 ### Update `dot` options
 
-Alternatively, you can edit the file located at `$HOME/.dotconfig`.
+*Alternatively, you can edit the file located at `$HOME/.dotconfig`.*
 
     $ dot config [option] [value]
 

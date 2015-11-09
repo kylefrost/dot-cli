@@ -2,12 +2,14 @@ import click
 import ConfigParser
 import os
 import shutil
+import random
+import string
 from git import Git
 
 Config = ConfigParser.ConfigParser()
 
 @click.group()
-@click.option('--verbose', is_flag=True, default=False, help="Run dot in verbose mode.")
+@click.option('--verbose', '-v', is_flag=True, default=False, help="Run dot in verbose mode.")
 @click.pass_context
 def main(ctx, verbose):
     """Lightweight tool for managing dotfiles with git and the command line"""
@@ -29,7 +31,12 @@ def push(ctx):
     git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
     return_code = git.push()
 
-    VerboseLog('git.push() return code was ' + return_code, ctx)
+    VerboseLog('git.push() return codes were ' + str(return_code[0]) + ' ' + str(return_code[1]) + ' ' + str(return_code[2]), ctx)
+
+    if return_code[1] != 0 and return_code[2] == 0:
+        click.echo("No dotfile changes to push.")
+    elif return_code[2] != 0:
+        click.echo("There was a problem pushing the changes.")
 
 @main.command(help="Pull dotfile changes using git.")
 @click.pass_context
@@ -43,15 +50,22 @@ def pull(ctx):
     git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
     return_code = git.pull()
 
-    VerboseLog('git.pull() return code was ' + return_code, ctx)
+    VerboseLog('git.pull() return code was ' + str(return_code), ctx)
 
 @main.command(help="Add files to dot's tracking.")
+@click.argument('filename')
 @click.pass_context
-def track(ctx):
+def track(ctx, filename):
     """Add files to dot's tracking"""
     
     VerboseLog('Running track()', ctx)
-    pass
+
+    trackfile = os.path.expanduser("~") + "/.dot/.trackfile"
+    
+    with open(trackfile, 'a+') as tf:
+        tf.write(filename + "\n")
+
+    click.echo('Now tracking ' + filename)
 
 @main.command(help="Clean dot to start over.")
 @click.pass_context
@@ -151,13 +165,18 @@ def config_exists():
     pass
 
 # TODO: Get config file string and return
-def config_file():
+def config_file_path():
     """Return config file path as string"""
     pass
 
 # TODO: Get dot git directory ($HOME/.dot/) and return
-def dot_dir():
+def dot_dir_path():
     """Return dot directory path as string"""
+    pass
+
+# TODO: Get trackfile directory and return
+def trackfile_path():
+    """Return trackfile path as string"""
     pass
 
 # TODO: Implement dynamic home, replace instances of os.path.expanduser("~") with home()
