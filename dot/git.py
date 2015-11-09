@@ -22,7 +22,14 @@ class Git:
         with open(os.devnull, 'w') as fnull:
             gclone = subprocess.call(["git", "clone", git_url, "."], stdout=fnull, stderr=subprocess.STDOUT)
 
-            with open("README.md", 'a+') as readme:
+        already_has_managed_text = False
+        with open('README.md', 'r') as f:
+            for line in f:
+                if line == "### Managed by [dot](https://github.com/kylefrost/dot)":
+                    already_has_managed_text = True
+
+        with open('README.md', 'a+') as readme:
+            if not already_has_managed_text:
                 readme.write("\n\n### Managed by [dot](https://github.com/kylefrost/dot)")
 
         return gclone

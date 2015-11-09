@@ -7,7 +7,7 @@ Lightweight tool for managing dotfiles with git and the command line.
 - `git` set up on your machine.
     - Must use SSH key authentication. For more information see [Generating SSH Keys](https://help.github.com/articles/generating-ssh-keys/).
         - *You really should be doing this for security purposes, anyway.*
-- A GitHub repo to store your dotfiles (default repo name is `dotfiles`, setup during config).
+- A GitHub repo to store your dotfiles (default repo name is `dotfiles`, setup during config), with a `README.md` file.
     - [Create a repo](https://github.com/new), named anything you want. It can even be private!
         - *If it is private, you must make sure to be using SSH key authentication, otherwise `dot` won't have permission to push.*
 - [`pip`](https://pypi.python.org/pypi/pip) (Python package manager)
