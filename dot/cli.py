@@ -88,12 +88,14 @@ def clean(ctx):
         click.echo('Clean failed.')
 
 @main.command(help="Change configuration options.")
+@click.argument('option')
+@click.argument('value')
 @click.pass_context
-def config(ctx):
+def config(ctx, option, value):
     """Change configuration options"""
 
     VerboseLog('Running config()', ctx)
-    pass
+    print option, value
 
 @main.command(help="Run initial setup.")
 @click.pass_context
@@ -132,18 +134,23 @@ def init(ctx):
         return_code = git.clone()
         VerboseLog("git.clone() return_code was " + str(return_code), ctx)
         if return_code == 0:
-            click.echo("\ndot is initalized. Run `dot pull` to pull dotfiles,\nor `dot track [dotfile]` if you\'ve never\nused dot. Also see `dot --help`.")
+            click.secho("\ndot is initalized. Run `dot pull` to pull dotfiles,\nor `dot track [dotfile]` if you\'ve never\nused dot. Also see `dot --help`.", fg='green')
         else:
-            click.echo("\ndot could not pull your repo from GitHub. Please\nrun `dot config [option] [value]` if you mistyped your information,\nor check your prerequisites at https://github.com/kylefrost/dot#prerequisites.")
+            click.secho("\ndot could not pull your repo from GitHub.\nRun `dot clean` followed by `dot init`\nto start over.\n\n(You may want to check your prerequisites\nat https://github.com/kylefrost/dot#prerequisites.)", fg='red')
     else:
         VerboseLog('Is not initial set up.', ctx)
-        click.echo('You already set up dot. Run `dot config [option] [value]` to\nchange a config value, or edit ' + config_file + '. To start\nover, remove ' + config_file + ' and ' + os.path.expanduser("~") + '/.dot/.')
+        click.secho('You already set up dot. Run `dot config [option] [value]` to\nchange a config value, or edit ' + config_file + '. To start\nover, run `dot clean`.', fg='yellow')
 
+
+
+"""                       """
+""" Non-command functions """
+"""                       """
 
 def VerboseLog(message, ctx):
     """Log verbose messages"""
     if ctx.obj['verbose']:
-        click.echo('VERBOSE: ' + message)
+        click.secho('VERBOSE: ' + message, fg='blue')
 
 def GetConfig(section):
     """Read config file sections"""
@@ -159,30 +166,26 @@ def GetConfig(section):
             dict1[option] = None
     return dict1
 
-# TODO: Implement check for config file existence, error if needed and not available
 def config_exists():
     """Determine if config file exists and return boolean"""
-    pass
+    return os.path.isfile(config_file_path())
 
-# TODO: Get config file string and return
 def config_file_path():
     """Return config file path as string"""
-    pass
+    return home() + "/.dotconfig"
 
-# TODO: Get dot git directory ($HOME/.dot/) and return
 def dot_dir_path():
     """Return dot directory path as string"""
-    pass
+    return home() + "/.dot"
 
-# TODO: Get trackfile directory and return
 def trackfile_path():
     """Return trackfile path as string"""
-    pass
+    return dot_dir_path() + "/.trackfile"
 
 # TODO: Implement dynamic home, replace instances of os.path.expanduser("~") with home()
 def home():
     """Determine home and return as string"""
-    pass
+    return os.path.expanduser("~")
 
 # TODO: Implement choice of git hosting site, add to init of Git() class object
 #       for use when interacting with git

@@ -1,4 +1,5 @@
 import os
+import click
 import subprocess
 from time import strftime
 
@@ -23,14 +24,17 @@ class Git:
             gclone = subprocess.call(["git", "clone", git_url, "."], stdout=fnull, stderr=fnull)
 
         already_has_managed_text = False
-        with open('README.md', 'r') as f:
-            for line in f:
-                if line == "### Managed by [dot](https://github.com/kylefrost/dot)":
-                    already_has_managed_text = True
+        if os.path.exists('README.md'):
+            with open('README.md', 'r') as f:
+                for line in f:
+                    if line == "### Managed by [dot](https://github.com/kylefrost/dot)":
+                        already_has_managed_text = True
 
-        with open('README.md', 'a+') as readme:
-            if not already_has_managed_text:
-                readme.write("\n\n### Managed by [dot](https://github.com/kylefrost/dot)")
+            with open('README.md', 'a+') as readme:
+                if not already_has_managed_text:
+                    readme.write("\n\n### Managed by [dot](https://github.com/kylefrost/dot)")
+        else:
+            click.secho("No README.md file found in repo.", fg='yellow')
 
         return gclone
 

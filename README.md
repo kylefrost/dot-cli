@@ -37,7 +37,7 @@ This will ask for your GitHub username and the name of the repo which you wish t
 
 ### Track dotfiles
 
-Must include the beginning "`.`" if the file is hidden (which if it isn't, is it even a dotfile?).
+Must include the beginning "`.`" if the file is hidden (which if it isn't, is it even a dotfile?). To view files that are being tracked, open the `trackfile` located at `$HOME/.dot/.trackfile`. This file is also pushed to your dotfiles repo when you use `dot push`. If you haven't started tracking files, this won't exist (there are no defaults). It is created upon the first run of `dot track [filename]`.
 
     $ dot track [filename]
 
