@@ -1,2 +1,17 @@
 # Shows all options for .dotconfig
 # To add, run: dot config <option> <value>
+
+# gitname is required and set upon setup, it is your GitHub username
+gitname = [username]
+
+# reponame is required and set upon setup, it is your GitHub repo's name
+reponame = [repo]
+
+# time sets the format of the commit messages, can be 12 or 24
+time = 12
+
+# home is the directory where your dotfiles are located, defaults to your system defined home
+home = $HOME
+
+# githost is not yet implemented
+# githost = github

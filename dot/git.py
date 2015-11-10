@@ -52,7 +52,14 @@ class Git:
     def push(self, commit_time_format=None):
         """Git push functionality"""
         path = self.home + self._dotdir
-        commit_msg = 'dot: Updated dotfiles at ' + strftime('%I:%M:%S %p') + ' on ' + strftime('%b %d')
+
+        if commit_time_format is None or commit_time_format == "12":
+            commit_msg = 'dot: Updated dotfiles at ' + strftime('%I:%M:%S %p') + ' on ' + strftime('%b %d')
+        elif commit_time_format == "24":
+            commit_msg = 'dot: Updated dotfiles at ' + strftime('%H:%M:%S') + ' on ' + strftime('%d %b')
+        else:
+            commit_msg = 'dot: Updated dotfiles at ' + strftime('%I:%M:%S %p') + ' on ' + strftime('%b %d')
+
         os.chdir(path)
         with open(os.devnull, 'w+') as fnull:
             add = subprocess.call(['git', 'add', '--all'], stdout=fnull, stderr=fnull)

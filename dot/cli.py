@@ -6,16 +6,20 @@ import random
 import string
 from git import Git
 
+VERSION='0.0.1'
+
 @click.group()
 @click.option('--verbose', '-v', is_flag=True, default=False, help='Run dot in verbose mode.')
+@click.version_option(VERSION, prog_name='dot')
 @click.pass_context
-def main(ctx, verbose):
+def main(ctx, verbose, version):
     """Lightweight tool for managing dotfiles with git and the command line"""
 
     ctx.obj = {}
     ctx.obj['verbose'] = verbose
 
-    VerboseLog('Running dot...', ctx)
+    VerboseLog('Running dot', ctx)
+
 
 @main.command(help='Push dotfile changes using git.')
 @click.pass_context
@@ -26,7 +30,8 @@ def push(ctx):
     check_init(ctx)
 
     if not os.path.exists(trackfile_path()):
-        click.secho('Pssst...you aren\'t tracking any files.\nTry running `dot track [filename]`.', fg='yellow', bold=True)
+        VerboseLog('.trackfile does not exist.', ctx)
+        click.secho('Pssst...you aren\'t tracking any files.\nTry running `dot track [filename]`\n.', fg='yellow', bold=True)
         ctx.abort()
 
     with open(trackfile_path(), 'r') as trf:
@@ -36,8 +41,8 @@ def push(ctx):
             shutil.copyfile(home() + '/' + line, dot_dir_path() + '/' + line)
 
     VerboseLog('Creating Git class object, running git.push()', ctx)
-    git = Git(home(), GetConfig('options')['gitname'], GetConfig('options')['reponame'])
-    return_code = git.push()
+    git = Git(home(), Conf('options', 'gitname'), Conf('options', 'reponame'))
+    return_code = git.push(Conf('options', 'time'))
 
     VerboseLog('git.push() return codes were ' +
                 str(return_code[0]) + ' ' + 
@@ -47,9 +52,9 @@ def push(ctx):
     if return_code[1] != 0 and return_code[2] == 0:
         click.echo('No dotfile changes to push.')
     elif return_code[2] != 0:
-        click.secho('There was a problem pushing the changes.\n', fg='red')
+        click.secho('\nThere was a problem pushing the changes.\n', fg='red')
     else:
-        click.secho('dotfiles pushed.\n', fg='green')
+        click.secho('\ndotfiles pushed.\n', fg='green')
 
 @main.command(help='Pull dotfile changes using git.')
 @click.pass_context
@@ -60,7 +65,7 @@ def pull(ctx):
     check_init(ctx)
 
     if not os.path.exists(trackfile_path()):
-        click.secho('Pssst...you aren\'t tracking any files.\nTry running `dot track [filename]`.', fg='yellow', bold=True)
+        click.secho('Pssst...you aren\'t tracking any files.\nTry running `dot track [filename]`\n.', fg='yellow', bold=True)
         ctx.abort()
 
     with open(trackfile_path(), 'r') as trf:
@@ -70,15 +75,15 @@ def pull(ctx):
             shutil.copyfile(home() + '/' + line, dot_dir_path() + '/' + line)
 
     VerboseLog('Creating Git class object, running git.pull()', ctx)
-    git = Git(home(), GetConfig('options')['gitname'], GetConfig('options')['reponame'])
+    git = Git(home(), Conf('options', 'gitname'), Conf('options', 'reponame'))
     return_code = git.pull()
 
     VerboseLog('git.pull() return code was ' + str(return_code), ctx)
 
     if return_code == 0:
-        click.secho('dotfiles pulled.\n', fg='green')
+        click.secho('\ndotfiles pulled.\n', fg='green')
     else:
-        click.secho('There was an error pulling the dotfiles.\n', fg='red')
+        click.secho('\nThere was an error pulling the dotfiles.\n', fg='red')
 
 @main.command(help='Add files to dot\'s tracking.')
 @click.argument('filename')
@@ -91,10 +96,18 @@ def track(ctx, filename):
 
     trackfile = trackfile_path()
     
-    with open(trackfile, 'a+') as tf:
-        tf.write(filename + '\n')
+    already_contains_filename = False
 
-    click.echo('Now tracking ' + filename)
+    with open(trackfile, 'a+') as tf:
+        for line in tf:
+            if line.rstrip() == filename:
+                already_contains_filename = True
+
+        if not already_contains_filename:
+            tf.write(filename + '\n')
+            click.secho('\nNow tracking ' + filename + '\n', fg='green')
+        else:
+            click.secho('\nYou are already tracking ' + filename + '\n', fg='yellow')
 
 @main.command(help='Clean dot to start over.')
 @click.pass_context
@@ -134,7 +147,7 @@ def config(ctx, option, value):
         Config.set('options', option, value)
         Config.write(cf)
 
-    click.secho(option + ' set to ' + value, fg='green')
+    click.secho('\n' + option + ' set to ' + value + '\n', fg='green')
     
 
 @main.command(help='Run initial setup.')
@@ -169,7 +182,7 @@ def init(ctx):
         VerboseLog('Options set.', ctx)
         VerboseLog('Cloning repo into $HOME/.dot/', ctx)
 
-        git = Git(home(), GetConfig('options')['gitname'], GetConfig('options')['reponame'])
+        git = Git(home(), Conf('options', 'gitname'), Conf('options', 'reponame'))
         return_code = git.clone()
         VerboseLog('git.clone() return_code was ' + str(return_code), ctx)
         if return_code == 0:
@@ -191,21 +204,18 @@ def VerboseLog(message, ctx):
     if ctx.obj['verbose']:
         click.secho('VERBOSE: ' + message, fg='blue')
 
-def GetConfig(section):
+def Conf(section, option):
     """Read config file sections"""
     Config = ConfigParser.ConfigParser()
     Config.read(config_file_path())
-    dict1 = {}
-    options = Config.options(section)
-    for option in options:
-        try:
-            dict1[option] = Config.get(section, option)
-            if dict1[option] == -1:
-                print 'error'
-        except:
-            print 'exception on %s!' % option
-            dict1[option] = None
-    return dict1
+
+    if Config.has_section(section):
+        if Config.has_option(section, option):
+            return Config.get(section, option)
+        else:
+            return None
+    else:
+        return None
 
 def config_exists():
     """Determine if config file exists and return boolean"""
@@ -228,9 +238,7 @@ def check_init(ctx):
         click.secho('\ndot not set up. Use `dot init` to begin.\n', fg='red')
         ctx.abort()
 
-# TODO: Implement dynamic home, replace instances of os.path.expanduser("~") with home()
 def home():
-    """Determine home and return as string"""
     return os.path.expanduser('~')
 
 # TODO: Implement choice of git hosting site, add to init of Git() class object
