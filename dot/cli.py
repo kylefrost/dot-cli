@@ -6,7 +6,7 @@ import random
 import string
 from git import Git
 
-VERSION='0.0.1'
+VERSION='0.0.2'
 
 @click.group()
 @click.option('--verbose', '-v', is_flag=True, default=False, help='Run dot in verbose mode.')

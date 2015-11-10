@@ -7,7 +7,7 @@ dependencies = ['click']
 
 setup(
     name='dot-cli',
-    version='0.0.1',
+    version='0.0.2',
     url='https://github.com/kylefrost/dot',
     author='Kyle Frost',
     author_email='kyle@kylefrost.me',
@@ -28,9 +28,9 @@ setup(
         # As from http://pypi.python.org/pypi?%3Aaction=list_classifiers
         # 'Development Status :: 1 - Planning',
         # 'Development Status :: 2 - Pre-Alpha',
-        'Development Status :: 3 - Alpha',
+        # 'Development Status :: 3 - Alpha',
         # 'Development Status :: 4 - Beta',
-        # 'Development Status :: 5 - Production/Stable',
+        'Development Status :: 5 - Production/Stable',
         # 'Development Status :: 6 - Mature',
         # 'Development Status :: 7 - Inactive',
         'Environment :: Console',
