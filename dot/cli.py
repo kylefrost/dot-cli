@@ -38,7 +38,8 @@ def push(ctx):
         for line in trf:
             line = line.rstrip()
             VerboseLog('Copying ' + line + ' to ' + dot_dir_path() + '/' + line, ctx)
-            shutil.copyfile(home() + '/' + line, dot_dir_path() + '/' + line)
+            if os.path.exists(home() + '/' + line):
+                shutil.copyfile(home() + '/' + line, dot_dir_path() + '/' + line)
 
     VerboseLog('Creating Git class object, running git.push()', ctx)
     git = Git(home(), Conf('options', 'gitname'), Conf('options', 'reponame'))
@@ -72,7 +73,8 @@ def pull(ctx):
         for line in trf:
             line = line.rstrip()
             VerboseLog('Copying ' + dot_dir_path() + '/' + line + ' to ' + home() + '/' + line, ctx)
-            shutil.copyfile(dot_dir_path() + '/' + line, home() + '/' + line)
+            if os.path.exists(dot_dir_path() + '/' + line):
+                shutil.copyfile(dot_dir_path() + '/' + line, home() + '/' + line)
 
     VerboseLog('Creating Git class object, running git.pull()', ctx)
     git = Git(home(), Conf('options', 'gitname'), Conf('options', 'reponame'))
