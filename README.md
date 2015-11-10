@@ -19,6 +19,13 @@ __*Current version: 0.0.4*__
 Simply run:
 
     $ pip install dot-cli
+
+Install latest stable release manually:
+
+    $ git clone https://github.com/kylefrost/dot-cli.git -b stable
+    $ cd dot-cli/
+    $ pip install -r requirements.txt
+    $ python setup.py install
     
 Or if you want the most up-to-date version (could be broken!):
     
