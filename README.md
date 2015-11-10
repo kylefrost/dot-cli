@@ -2,7 +2,7 @@
 
 Lightweight tool for managing dotfiles with git and the command line.
 
-__*Current version: 0.0.1*__
+__*Current version: 0.0.4*__
 
 # Prerequisites
 
