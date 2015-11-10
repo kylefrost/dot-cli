@@ -6,8 +6,6 @@ import random
 import string
 from git import Git
 
-Config = ConfigParser.ConfigParser()
-
 @click.group()
 @click.option('--verbose', '-v', is_flag=True, default=False, help="Run dot in verbose mode.")
 @click.pass_context
@@ -25,13 +23,15 @@ def push(ctx):
     """Push dotfile changes to GitHub"""
 
     VerboseLog('Running push()', ctx)
-    Config.read(os.path.expanduser("~") + "/.dotconfig")
 
     VerboseLog('Creating Git class object, running git.push()', ctx)
-    git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
+    git = Git(home(), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
     return_code = git.push()
 
-    VerboseLog('git.push() return codes were ' + str(return_code[0]) + ' ' + str(return_code[1]) + ' ' + str(return_code[2]), ctx)
+    VerboseLog('git.push() return codes were ' +
+                str(return_code[0]) + ' ' + 
+                str(return_code[1]) + ' ' + 
+                str(return_code[2]), ctx)
 
     if return_code[1] != 0 and return_code[2] == 0:
         click.echo("No dotfile changes to push.")
@@ -44,10 +44,9 @@ def pull(ctx):
     """Pull dotfile changes from GitHub"""
 
     VerboseLog('Running pull()', ctx)
-    Config.read(os.path.expanduser("~") + "/.dotconfig")
 
     VerboseLog('Creating Git class object, running git.pull()', ctx)
-    git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
+    git = Git(home(), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
     return_code = git.pull()
 
     VerboseLog('git.pull() return code was ' + str(return_code), ctx)
@@ -60,7 +59,7 @@ def track(ctx, filename):
     
     VerboseLog('Running track()', ctx)
 
-    trackfile = os.path.expanduser("~") + "/.dot/.trackfile"
+    trackfile = trackfile_path()
     
     with open(trackfile, 'a+') as tf:
         tf.write(filename + "\n")
@@ -75,17 +74,17 @@ def clean(ctx):
     VerboseLog('Running clean()', ctx)
 
     click.echo('Removing .dotconfig')
-    if os.path.isfile(os.path.expanduser("~") + "/.dotconfig"):
-        os.remove(os.path.expanduser("~") + "/.dotconfig")
+    if config_exists():
+        os.remove(config_file_path())
 
     click.echo('Removing ~/.dot/')
-    if os.path.isdir(os.path.expanduser("~") + "/.dot"):
-        shutil.rmtree(os.path.expanduser("~") + "/.dot")
+    if os.path.isdir(dot_dir_path()):
+        shutil.rmtree(dot_dir_path())
 
-    if not os.path.isfile(os.path.expanduser("~") + "/.dotconfig") and not os.path.isdir(os.path.expanduser("~") + "/.dot"):
-        click.echo('Clean completed.')
+    if not config_exists() and not os.path.isdir(dot_dir_path()):
+        click.secho('Clean completed.', fg='green')
     else:
-        click.echo('Clean failed.')
+        click.secho('Clean failed.', fg='red')
 
 @main.command(help="Change configuration options.")
 @click.argument('option')
@@ -104,14 +103,14 @@ def init(ctx):
 
     VerboseLog('Running init()', ctx)
 
-    config_file = os.path.expanduser("~") + "/.dotconfig"
+    config_file = config_file_path()
+    Config = ConfigParser.ConfigParser()
 
-    if not os.path.isfile(config_file):
-
+    if not config_exists():
         VerboseLog('Initializing first set up.', ctx)
 
         f = open(config_file, 'w+')
-        os.makedirs(os.path.expanduser("~") + "/.dot/")
+        os.makedirs(dot_dir_path())
 
         Config.add_section('options')
 
@@ -129,17 +128,16 @@ def init(ctx):
         VerboseLog('Options set.', ctx)
         VerboseLog('Cloning repo into $HOME/.dot/', ctx)
 
-        Config.read(config_file)
-        git = Git(os.path.expanduser("~"), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
+        git = Git(home(), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
         return_code = git.clone()
         VerboseLog("git.clone() return_code was " + str(return_code), ctx)
         if return_code == 0:
-            click.secho("\ndot is initalized. Run `dot pull` to pull dotfiles,\nor `dot track [dotfile]` if you\'ve never\nused dot. Also see `dot --help`.", fg='green')
+            click.secho("\ndot is initalized. Run `dot pull` to pull dotfiles,\nor `dot track [dotfile]` if you\'ve never\nused dot. Also see `dot --help`.\n", fg='green')
         else:
-            click.secho("\ndot could not pull your repo from GitHub.\nRun `dot clean` followed by `dot init`\nto start over.\n\n(You may want to check your prerequisites\nat https://github.com/kylefrost/dot#prerequisites.)", fg='red')
+            click.secho("\ndot could not pull your repo from GitHub.\nRun `dot clean` followed by `dot init`\nto start over.\n\n(You may want to check your prerequisites\nat https://github.com/kylefrost/dot#prerequisites.)\n", fg='red')
     else:
         VerboseLog('Is not initial set up.', ctx)
-        click.secho('You already set up dot. Run `dot config [option] [value]` to\nchange a config value, or edit ' + config_file + '. To start\nover, run `dot clean`.', fg='yellow')
+        click.secho('You already set up dot. Run `dot config [option] [value]` to\nchange a config value, or edit ' + config_file + '. To start\nover, run `dot clean`.\n', fg='yellow')
 
 
 
@@ -154,6 +152,8 @@ def VerboseLog(message, ctx):
 
 def GetConfig(section):
     """Read config file sections"""
+    Config = ConfigParser.ConfigParser()
+    Config.read(config_file_path())
     dict1 = {}
     options = Config.options(section)
     for option in options:
@@ -162,7 +162,7 @@ def GetConfig(section):
             if dict1[option] == -1:
                 print "error"
         except:
-            print("exception on %s!" % option)
+            print "exception on %s!" % option
             dict1[option] = None
     return dict1
 
