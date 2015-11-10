@@ -7,8 +7,9 @@ dependencies = ['click']
 
 setup(
     name='dot-cli',
-    version='0.0.2',
+    version='0.0.3',
     url='https://github.com/kylefrost/dot',
+    download_url='https://github.com/kylefrost/dot-cli/tarball/0.0.3',
     author='Kyle Frost',
     author_email='kyle@kylefrost.me',
     description='Lightweight tool for managing dotfiles with git and the command line.',
