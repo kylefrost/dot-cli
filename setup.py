@@ -9,11 +9,11 @@ setup(
     name='dot',
     version='0.0.1',
     url='https://github.com/kylefrost/dot',
-    license='BSD',
+    license='',
     author='Kyle Frost',
     author_email='kyle@kylefrost.me',
     description='Lightweight tool for managing dotfiles with git and the command line.',
-    long_description=__doc__,
+    #long_description=__doc__,
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
     zip_safe=False,
@@ -42,7 +42,7 @@ setup(
         'Operating System :: Windows',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 3',
+        #'Programming Language :: Python :: 3',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ]
 )

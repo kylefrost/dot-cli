@@ -12,7 +12,7 @@ VERSION='0.0.1'
 @click.option('--verbose', '-v', is_flag=True, default=False, help='Run dot in verbose mode.')
 @click.version_option(VERSION, prog_name='dot')
 @click.pass_context
-def main(ctx, verbose, version):
+def main(ctx, verbose):
     """Lightweight tool for managing dotfiles with git and the command line"""
 
     ctx.obj = {}
