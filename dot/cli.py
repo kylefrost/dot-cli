@@ -23,6 +23,7 @@ def push(ctx):
     """Push dotfile changes to GitHub"""
 
     VerboseLog('Running push()', ctx)
+    check_init(ctx)
 
     VerboseLog('Creating Git class object, running git.push()', ctx)
     git = Git(home(), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
@@ -44,6 +45,7 @@ def pull(ctx):
     """Pull dotfile changes from GitHub"""
 
     VerboseLog('Running pull()', ctx)
+    check_init(ctx)
 
     VerboseLog('Creating Git class object, running git.pull()', ctx)
     git = Git(home(), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
@@ -58,6 +60,7 @@ def track(ctx, filename):
     """Add files to dot's tracking"""
     
     VerboseLog('Running track()', ctx)
+    check_init(ctx)
 
     trackfile = trackfile_path()
     
@@ -72,6 +75,7 @@ def clean(ctx):
     """Clean dot to start over"""
 
     VerboseLog('Running clean()', ctx)
+    check_init(ctx)
 
     click.echo('Removing .dotconfig')
     if config_exists():
@@ -94,7 +98,17 @@ def config(ctx, option, value):
     """Change configuration options"""
 
     VerboseLog('Running config()', ctx)
-    print option, value
+    check_init(ctx)
+
+    Config = ConfigParser.ConfigParser()
+    Config.read(config_file_path())
+
+    with open(config_file_path(), 'w+') as cf:
+        Config.set('options', option, value)
+        Config.write(cf)
+
+    click.secho(option + " set to " + value, fg='green')
+    
 
 @main.command(help="Run initial setup.")
 @click.pass_context
@@ -132,9 +146,9 @@ def init(ctx):
         return_code = git.clone()
         VerboseLog("git.clone() return_code was " + str(return_code), ctx)
         if return_code == 0:
-            click.secho("\ndot is initalized. Run `dot pull` to pull dotfiles,\nor `dot track [dotfile]` if you\'ve never\nused dot. Also see `dot --help`.\n", fg='green')
+            click.secho('\ndot is initalized. Run `dot pull` to pull dotfiles,\nor `dot track [dotfile]` if you\'ve never\nused dot. Also see `dot --help`.\n', fg='green')
         else:
-            click.secho("\ndot could not pull your repo from GitHub.\nRun `dot clean` followed by `dot init`\nto start over.\n\n(You may want to check your prerequisites\nat https://github.com/kylefrost/dot#prerequisites.)\n", fg='red')
+            click.secho('\ndot could not pull your repo from GitHub.\nRun `dot clean` followed by `dot init`\nto start over.\n\n(You may want to check your prerequisites\nat https://github.com/kylefrost/dot#prerequisites.)\n', fg='red')
     else:
         VerboseLog('Is not initial set up.', ctx)
         click.secho('You already set up dot. Run `dot config [option] [value]` to\nchange a config value, or edit ' + config_file + '. To start\nover, run `dot clean`.\n', fg='yellow')
@@ -181,6 +195,11 @@ def dot_dir_path():
 def trackfile_path():
     """Return trackfile path as string"""
     return dot_dir_path() + "/.trackfile"
+
+def check_init(ctx):
+    if not config_exists():
+        click.secho('\ndot not set up. Use `dot init` to begin.\n', fg='red')
+        ctx.abort()
 
 # TODO: Implement dynamic home, replace instances of os.path.expanduser("~") with home()
 def home():
