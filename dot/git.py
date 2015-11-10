@@ -24,7 +24,7 @@ class Git:
             gclone = subprocess.call(['git', 'clone', git_url, '.'], stdout=fnull, stderr=fnull)
 
         already_has_managed_text = False
-        managed_text = '### Managed by [dot](https://github.com/kylefrost/dot)'
+        managed_text = '### Managed by [dot](https://github.com/kylefrost/dot-cli)'
 
         if os.path.exists('README.md'):
             with open('README.md', 'r') as f:

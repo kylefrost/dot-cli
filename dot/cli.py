@@ -6,7 +6,7 @@ import random
 import string
 from git import Git
 
-VERSION='0.0.3'
+VERSION='0.0.4'
 
 @click.group()
 @click.option('--verbose', '-v', is_flag=True, default=False, help='Run dot in verbose mode.')
@@ -188,7 +188,7 @@ def init(ctx):
         if return_code == 0:
             click.secho('\ndot is initalized. Run `dot pull` to pull dotfiles,\nor `dot track [dotfile]` if you\'ve never\nused dot. Also see `dot --help`.\n', fg='green')
         else:
-            click.secho('\ndot could not pull your repo from GitHub.\nRun `dot clean` followed by `dot init`\nto start over.\n\n(You may want to check your prerequisites\nat https://github.com/kylefrost/dot#prerequisites.)\n', fg='red')
+            click.secho('\ndot could not pull your repo from GitHub.\nRun `dot clean` followed by `dot init`\nto start over.\n\n(You may want to check your prerequisites\nat https://github.com/kylefrost/dot-cli#prerequisites.)\n', fg='red')
     else:
         VerboseLog('Is not initial set up.', ctx)
         click.secho('You already set up dot. Run `dot config [option] [value]` to\nchange a config value, or edit ' + config_file + '. To start\nover, run `dot clean`.\n', fg='yellow')
