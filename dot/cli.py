@@ -25,6 +25,16 @@ def push(ctx):
     VerboseLog('Running push()', ctx)
     check_init(ctx)
 
+    if not os.path.exists(trackfile_path()):
+        click.secho('Pssst...you aren\'t tracking any files.\nTry running `dot track [filename]`.', fg='yellow', bold=True)
+        ctx.abort()
+
+    with open(trackfile_path(), 'r') as trf:
+        for line in trf:
+            line = line.rstrip()
+            VerboseLog('Copying ' + line + ' to ' + dot_dir_path() + '/' + line, ctx)
+            shutil.copyfile(home() + '/' + line, dot_dir_path() + '/' + line)
+
     VerboseLog('Creating Git class object, running git.push()', ctx)
     git = Git(home(), GetConfig("options")['gitname'], GetConfig("options")['reponame'])
     return_code = git.push()
@@ -46,6 +56,16 @@ def pull(ctx):
 
     VerboseLog('Running pull()', ctx)
     check_init(ctx)
+
+    if not os.path.exists(trackfile_path()):
+        click.secho('Pssst...you aren\'t tracking any files.\nTry running `dot track [filename]`.', fg='yellow', bold=True)
+        ctx.abort()
+
+    with open(trackfile_path(), 'r') as trf:
+        for line in trf:
+            line = line.rstrip()
+            VerboseLog('Copying ' + dot_dir_path() + '/' + line + ' to ' + home() + '/' + line, ctx)
+            shutil.copyfile(home() + '/' + line, dot_dir_path() + '/' + line)
 
     VerboseLog('Creating Git class object, running git.pull()', ctx)
     git = Git(home(), GetConfig("options")['gitname'], GetConfig("options")['reponame'])

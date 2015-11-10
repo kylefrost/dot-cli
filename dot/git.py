@@ -49,7 +49,7 @@ class Git:
 
         return gpull
 
-    def push(self):
+    def push(self, commit_time_format=None):
         """Git push functionality"""
         path = self.home + self._dotdir
         commit_msg = "dot: Updated dotfiles at " + strftime("%I:%M:%S %p") + " on " + strftime("%b %d")
