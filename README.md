@@ -18,7 +18,7 @@ __*Current version: 0.0.1*__
 
 Simply run:
 
-    $ pip install dot
+    $ pip install dot-cli
     
 Or if you want the most up-to-date version (could be broken!):
     
